@@ -1,0 +1,26 @@
+import cv2
+from cvzone.ClassificationModule import Classifier
+
+# Initialize the classifier
+classifier = Classifier('path_to_your_model.h5', 'path_to_class_names.txt')
+
+# Set up webcam
+cap = cv2.VideoCapture(0)
+
+while True:
+    # Read frame from webcam
+    ret, frame = cap.read()
+    
+    # Use CVZone classifier to predict the label of the waste in the frame
+    label, confidence = classifier.getPrediction(frame)
+
+    # Show the frame with the predicted label
+    cv2.putText(frame, f'{label} ({confidence:.2f})', (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    cv2.imshow("Waste Classification", frame)
+    
+    # Exit the loop if 'q' is pressed
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
